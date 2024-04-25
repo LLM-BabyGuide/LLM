@@ -22,6 +22,10 @@ Stanford Alpaca: An Instruction-following LLaMA Model：https://github.com/tatsu
 
 Preparing Data for Fine-tunings of Large Language Models：https://heidloff.net/article/fine-tuning-instructions/
 
+Llama Recipes: Examples to get started using the Llama models from Meta：https://github.com/meta-llama/llama-recipes
+
+Llama2+LangChain外挂本地知识库详细教程：https://xtx0o8yn7x.feishu.cn/docx/UOAadjjReoI6UBxPq4lcI9frnMb
+
 
 
 ## 半精度微调Llama2注意点：
