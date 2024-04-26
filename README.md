@@ -34,12 +34,13 @@ Llama2+LangChain外挂本地知识库详细教程：https://xtx0o8yn7x.feishu.cn
 
 ```
 tokenizer.padding_side='right' # 一定要设置padding_side为right，否则batch大于1时可能不收敛
-tokenizer.pad_token = tokenizer.eos_token
 ```
 
 2、LlaMA2模型的分词器词表的问题，要适当调整数据的最大长度，保证数据内容的完整性：
 
+```
 llama的tokenizer词表很小，中文无法被单个token标识，一个中文字符会被标记为多个token，原文本就扩大了几倍，所以要扩大max_length。
+```
 
 3、LlaMA2模型加载时，需要指定torch dtype为半精度，否则模型将按照fp32进行加载
 
@@ -71,5 +72,16 @@ args = TrainingArguments(
     gradient_checkpointing=True, # 需要model.enable_input_require_grads()
     adam_epsilon=1e-4 # 和半精度舍入有关
 )
+```
+
+7、LIaMA2模型分词器会将非单独存在的eos token切开，因此对于eos_token要单独处理，否则训练后的模型在预测时不知道何时停止
+
+![1714113064826](1714113064826.png)
+
+8、半精度训练时，正确加入eos_token后，要将pad_token_id也置为eos_token_id，否则模型通用无法收敛（因为出现溢出）
+
+```
+# tokenizer.pad_token = tokenizer.eos_token
+tokenizer.pad_token_id = 2
 ```
 
