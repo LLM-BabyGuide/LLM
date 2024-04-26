@@ -1,5 +1,9 @@
 # LLM使用
 
+先看完transformer和huggingface仓库的资料再看这个效果比较好。
+
+
+
 ## 计划微调：
 
 Llama2：已完成
