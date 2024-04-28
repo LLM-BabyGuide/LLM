@@ -117,3 +117,39 @@ special token：\<user> 、 \<role>
 
 ![1714274446263](1714274446263.png)
 
+```python
+def process_func(example):
+    MAX_LENGTH = 256
+    input_ids, attention_mask, labels = [], [], []
+
+    # query
+    instruction = "\n".join([example["instruction"], example["input"]]).strip()     
+
+    # tokenizer.build_chat_input
+    # 就会构造出：[gMASK]sop<|user|> \n query<|assistant|>
+    instruction = tokenizer.build_chat_input(instruction, history=[], role="user")  
+
+    # response前面一定加\n
+    # 加add_special_tokens=False是避免在response部分加上[gMASK]sop
+    response = tokenizer("\n" + example["output"], add_special_tokens=False)        # \n response, 缺少eos token
+
+    # 组装
+    # 因为build_chat_inpu的input_ids是一个tensor，所以要变成list
+    input_ids = instruction["input_ids"][0].numpy().tolist() + response["input_ids"] + [tokenizer.eos_token_id]
+    attention_mask = instruction["attention_mask"][0].numpy().tolist() + response["attention_mask"] + [1] # 多一位
+    labels = [-100] * len(instruction["input_ids"][0].numpy().tolist()) + response["input_ids"] + [tokenizer.eos_token_id]
+    if len(input_ids) > MAX_LENGTH:
+        input_ids = input_ids[:MAX_LENGTH]
+        attention_mask = attention_mask[:MAX_LENGTH]
+        labels = labels[:MAX_LENGTH]
+    return {
+        "input_ids": input_ids,
+        "attention_mask": attention_mask,
+        "labels": labels
+    }
+```
+
+4、训练细节
+
+![1714281227062](1714281227062.png)
+
