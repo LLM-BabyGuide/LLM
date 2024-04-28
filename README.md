@@ -89,3 +89,31 @@ args = TrainingArguments(
 tokenizer.pad_token_id = 2
 ```
 
+
+
+## ChatGLM使用要点：
+
+1、调用chat方法
+
+```
+model.chat(tokenizer, "python代码使用if-else", history=[])
+```
+
+2、**tokenizer.get_command**
+
+只有通过get_command才能获得真正special token的token id。
+
+special token：\<user> 、 \<role>
+
+所以，要获得token_id:
+
+- special token: tokenizer.get_command(f"<|{role}|>")
+
+- 普通文本： tokenizer.encode(message)
+
+![1714274400611](1714274400611.png)
+
+3、**训练数据格式：**
+
+![1714274446263](1714274446263.png)
+
