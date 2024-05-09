@@ -8,7 +8,7 @@
 
 Llama2：已完成
 
-ChatGLM
+ChatGLM：已完成
 
 NL2SQL
 
